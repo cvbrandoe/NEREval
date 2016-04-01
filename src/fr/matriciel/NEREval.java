@@ -52,7 +52,7 @@ public class NEREval {
 		System.out.println("C (total number of annotated objects in the annotated file that are correct): "+c);
 		System.out.println("D (total number of omissions (deletions) performed by the system): "+d);
 		System.out.println("I (total number of adds performed by the system): "+i);
-		System.out.println("N (total number of named-entity (mentions?) in the gold): "+i);
+		System.out.println("N (total number of named-entity (mentions?) in the gold): "+n); //TODO unique entities or mentions? 
 		
 		// précision : le ratio entre le nombre de réponses correctes et toutes les réponses données par un système. 
 		// ou bien precision = right tagging / (right tagging + wrong tagging)
