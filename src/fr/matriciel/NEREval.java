@@ -5,7 +5,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,8 +20,7 @@ import scala.collection.mutable.HashSet;
  * The following is an algorithm for alignment of named-entities annotations (and their context) in two texts.
  * - places are annotated using the following symbols: {[place1]} and/or {[#place2#]} 
  * - contents of both input files must be identical except obviously their annotations
- * - parenthesis can only be used for indicating the presence of geographic coordinates which are actually not mandatory
- * TODO nouvel eval : difference frontières  
+ * - parenthesis can only be used for indicating the presence of geographic coordinates which are actually not mandatory 
  */
 public class NEREval {
 	
@@ -41,7 +39,10 @@ public class NEREval {
 		//total number of named-entity (mentions?) in the gold
 		Double n = 0.0;
 			
-		Double[] te = countMetrics(content1, content2);
+		Double[] te = countMetrics(content1, content2, Integer.parseInt(args[2]));
+		//Character threshold represents the difference between both input files in terms of characters, 
+		//1 or 2 indicate both files are almost identical (besides characters used by the annotations such as [ or })
+		//7 or 8 indicate that both files are quite different, besides annotations, there are sometimes letters or punctuation that differs considerably
 		d = te[0];
 		c = te[1];		
 		n = te[2];
@@ -81,8 +82,7 @@ public class NEREval {
 		//System.out.println();
 		//System.out.println("SER = D + I / R (for us N) : "+ (d + i) / n );
 		//here, we give equal importance to each error
-		
-		//TODO Degré de superposition  
+	
 	}
 	
 	/**
@@ -93,7 +93,7 @@ public class NEREval {
 	 * @param matches2
 	 * @return
 	 */
-	private static Double[] countMetrics(String content1, String content2) {
+	private static Double[] countMetrics(String content1, String content2, int charthreshold) {
 
 		//match context of NE in both texts
 		List<String> matches1 = matchENS(content1);
@@ -113,7 +113,7 @@ public class NEREval {
 				String annotNE = valsAnnot[2];
 				
 				if (overlaps(Integer.parseInt(valsGold[0].trim()), Integer.parseInt(valsGold[1].trim()), 
-						Integer.parseInt(valsAnnot[0].trim()), Integer.parseInt(valsAnnot[1].trim())) ) {
+						Integer.parseInt(valsAnnot[0].trim()), Integer.parseInt(valsAnnot[1].trim()), charthreshold) ) {
 					goldNE = goldNE.replaceAll("#", "");
 					if (goldNE.equals(annotNE)) {
 						found = true;
@@ -155,8 +155,7 @@ public class NEREval {
 	 * @param fin2
 	 * @return
 	 */
-	public static boolean overlaps(Integer ini1, Integer fin1, Integer ini2, Integer fin2) {
-		int dummy = 5;
+	public static boolean overlaps(Integer ini1, Integer fin1, Integer ini2, Integer fin2, int dummy) {
 		ini1 = ini1 - dummy;
 		fin1 = fin1 + dummy;
 		
@@ -207,7 +206,9 @@ public class NEREval {
 	        		StringUtils.countMatches(valENS, "[") +
 	        		StringUtils.countMatches(valENS, "#");	        
 	        int fin = finOrig - countC;	
-	        result.add(ini + " | " + fin + " | " + valENS+ " | " + iniOrig + " | " + finOrig);
+	        if (!valENS.contains("#")) {
+	        	result.add(ini + " | " + fin + " | " + valENS+ " | " + iniOrig + " | " + finOrig);
+	        }
 	        //System.out.println(ini + " - " + fin + " - " + valENS);
 	    }
 	    return result;
