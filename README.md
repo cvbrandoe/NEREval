@@ -1,5 +1,3 @@
-TEMP : https://drive.google.com/file/d/1kh_avm7clrSa-1b-7YmTn446L0dEdbhh/view
-
 ## NER Evaluation
 
 Here, you will find several code sources for use in the Matriciel project (PEPS CNRS), in particular
