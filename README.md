@@ -1,3 +1,7 @@
+
+PRES : https://docs.google.com/presentation/d/1WMa8Sc1RudVV2qeW7YxiXan1WUEWk_FISczUQA62bPE/edit?usp=sharing
+
+
 ## NER Evaluation
 
 Here, you will find several code sources for use in the Matriciel project (PEPS CNRS), in particular
